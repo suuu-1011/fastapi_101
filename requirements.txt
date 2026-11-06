@@ -1,2 +1,4 @@
 fastapi==0.65.1
 uvicorn==0.13.4
+SQLAIchemy==2.1.8
+psycopg==3.3.8

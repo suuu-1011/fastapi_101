@@ -1,14 +1,14 @@
-from pydantic import BaseModel, Field 
+from pydantic import BaseModel, Field, StrictStr 
 class UserCreate(BaseModel):
     name: str = Field(min_length=2, max_length=50, pattern=r"^[a-zA-Z ]+$")
     email: str 
-    phone: str = Field(min_length=10, max_length=15, pattern=r"^[0-9]+$")
+    phone: StrictStr = Field(min_length=10, max_length=15, pattern=r"^[0-9]+$")
     status: str = "active"
 
 class UserUpdate(BaseModel):
     name: str = Field(min_length=2, max_length=50, pattern=r"^[a-zA-Z ]+$")
     email: str 
-    phone: str = Field(min_length=10, max_length=15, pattern=r"^[0-9]+$")
+    phone: StrictStr = Field(min_length=10, max_length=15, pattern=r"^[0-9]+$")
     status: str = "active"
 
 class UserResponse(BaseModel):

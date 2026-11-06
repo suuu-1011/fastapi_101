@@ -5,9 +5,14 @@ from .models import Quote, User
 from .schemas import UserCreate, UserResponse, UserUpdate
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-
+from .pms import users
+from .pms import tasks
 
 app = FastAPI()
+
+app.include_router(users.router)
+
+app.include_router(tasks.router)
 
 @app.exception_handler(HTTPException)
 async def http_ecxeption_handler(request, exc):
@@ -85,7 +90,7 @@ async def get_user(user_id: str):
 # POST create user
 @app.post("/users/{user_id}", status_code=status.HTTP_201_CREATED)
 async def create_user(user_id: str, user: UserCreate):
-    USER_DB[user_id] = user.model_dump()
+    USER_DB[user_id] = user.dict()
     save_data(USER_DB, "users.json")
     return {"message": "User created successfully"}
 
@@ -96,7 +101,7 @@ async def update_user(user_id: str, user: UserUpdate): #tells fastapi to validat
     if user_id not in USER_DB:
         raise HTTPException(status_code=404, detail="User not found")
 
-    USER_DB[user_id] = user.model_dump()
+    USER_DB[user_id] = user.dict()
     save_data(USER_DB, "users.json")
     return {"message": "User updated successfully"}
 
