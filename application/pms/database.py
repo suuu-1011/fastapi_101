@@ -1,8 +1,12 @@
+import os
+from dotenv import load_dotenv
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
+load_dotenv()
 
-DATABASE_URL = "postgresql+psycopg://postgres:keepitprivate0@localhost:5432/pms_db"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 
@@ -14,11 +18,12 @@ SessionLocal = sessionmaker(
 
 Base = declarative_base()
 
-from .import models
+from . import models
+
 
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
-        db.close() 
+        db.close()

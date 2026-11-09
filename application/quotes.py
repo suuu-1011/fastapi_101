@@ -7,12 +7,14 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from .pms import users
 from .pms import tasks
+from .pms import auth
 
 app = FastAPI()
 
 app.include_router(users.router)
 
 app.include_router(tasks.router)
+app.include_router(auth.router)
 
 @app.exception_handler(HTTPException)
 async def http_ecxeption_handler(request, exc):
