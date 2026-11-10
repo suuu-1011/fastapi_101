@@ -272,3 +272,35 @@ The API uses appropriate HTTP status codes:
 - Environment variables for sensitive configuration.
 - Student-specific task access restrictions.
 
+## Database Migrations with Alembic
+
+Alembic is used to manage database schema changes and migrations in the PMS project.
+
+### Migration Commands
+
+```bash
+# Generate a migration after changing SQLAlchemy models
+alembic revision --autogenerate -m "migration description"
+
+# Apply all pending migrations
+alembic upgrade head
+
+# Roll back the latest migration
+alembic downgrade -1
+
+# Check the current migration version
+alembic current
+
+# View migration history
+alembic history
+```
+
+### Migration Workflow
+
+1. Update the SQLAlchemy models.
+2. Generate a migration using `alembic revision --autogenerate`.
+3. Review the generated migration file.
+4. Apply changes using `alembic upgrade head`.
+5. Verify the database schema.
+
+Alembic migrations help maintain database schema changes in a version-controlled and organized way.
