@@ -304,3 +304,56 @@ alembic history
 5. Verify the database schema.
 
 Alembic migrations help maintain database schema changes in a version-controlled and organized way.
+
+## Task Pagination, Search and Filtering
+
+The teacher task listing endpoint supports pagination, title search, and filtering.
+
+### Query Parameters
+
+| Parameter | Description | Example |
+|---|---|---|
+| skip | Number of records to skip | skip=0 |
+| limit | Maximum records to return | limit=5 |
+| search | Search tasks by title | search=Python |
+| status | Filter by task status | status=pending |
+| user_id | Filter by assigned student | user_id=2 |
+
+### Example Request
+
+GET /pms/tasks/?skip=0&limit=5&status=pending&user_id=2
+
+All parameters are optional.
+
+## Automated Testing with Pytest
+
+Install project dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run automated tests:
+
+```bash
+python -m pytest -q
+```
+
+The tests cover authentication, authorization, task creation, assignment, updating, and deletion.
+
+## Continuous Integration with GitHub Actions
+
+GitHub Actions automatically runs the project's pytest test suite whenever code is pushed or a pull request is created.
+
+The workflow is located at:
+
+`.github/workflows/tests.yml`
+
+The workflow performs these steps:
+
+1. Checks out the repository.
+2. Sets up Python 3.13.
+3. Installs project dependencies.
+4. Runs automated tests using pytest.
+
+Test results can be viewed in the **Actions** tab of the GitHub repository.

@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from .database import get_db
 from . import models, schemas
 from .dependencies import get_current_user, require_teacher
 
+from typing import Optional
 
 router = APIRouter(prefix="/pms/tasks", tags=["PMS Tasks"])
 
@@ -40,13 +41,37 @@ def create_task(
     return new_task
 
 
-# TEACHER: View all tasks
+# TEACHER: View tasks with pagination, search and filters
 @router.get("/", response_model=list[schemas.TaskResponse])
 def get_tasks(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=100),
+    search: Optional[str] = None,
+    status: Optional[str] = None,
+    user_id: Optional[int] = None,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(require_teacher)
 ):
-    return db.query(models.Task).all()
+    query = db.query(models.Task)
+
+    if search:
+        query = query.filter(
+            models.Task.title.ilike(f"%{search}%")
+        )
+
+    if status:
+        allowed_statuses = ["pending", "in progress", "done"]
+
+        if status not in allowed_statuses:
+            raise HTTPException(400, detail="Invalid task status")
+
+        query = query.filter(models.Task.status == status)
+
+    if user_id is not None:
+        query = query.filter(models.Task.user_id == user_id)
+
+    return query.offset(skip).limit(limit).all()
+
 
 
 # STUDENT: View own tasks

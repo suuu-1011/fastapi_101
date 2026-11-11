@@ -10,7 +10,7 @@ from . import models
 from .security import decode_token
 
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
 
 
 def get_current_user(
@@ -18,6 +18,14 @@ def get_current_user(
     db: Session = Depends(get_db)
 ):
     # Read the access token
+    #token = credentials.credentials
+
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authentication required"
+        )
+
     token = credentials.credentials
 
     try:
@@ -64,7 +72,12 @@ def get_current_user(
         )
 
     # Reject expired sessions
-    if auth_session.expires_at <= datetime.now(timezone.utc):
+    expires_at = auth_session.expires_at
+
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    
+    if expires_at <= datetime.now(timezone.utc):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Session has expired"
