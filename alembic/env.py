@@ -12,7 +12,7 @@ from sqlalchemy.engine import make_url
 # access to the values within the .ini file in use.
 config = context.config
 
-migration_url = make_url(DATABASE_URL).set(database="pms_migration_db")
+migration_url = make_url(DATABASE_URL)
 config.set_main_option("sqlalchemy.url", migration_url.render_as_string(hide_password=False).replace("%", "%%"))
 
 # Interpret the config file for Python logging.
