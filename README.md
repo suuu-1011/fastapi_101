@@ -357,3 +357,11 @@ The workflow performs these steps:
 4. Runs automated tests using pytest.
 
 Test results can be viewed in the **Actions** tab of the GitHub repository.
+
+## Live Deployment
+
+The PMS Task Manager API is deployed on Render.
+
+- **Live API:** https://pms-task-manager-api.onrender.com
+- **API Documentation (Swagger):** https://pms-task-manager-api.onrender.com/docs
+- **Health Check:** https://pms-task-manager-api.onrender.com/health
